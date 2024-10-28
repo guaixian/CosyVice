@@ -61,6 +61,9 @@ async def inference_cross_lingual(tts_text: str = Form(), prompt_wav: UploadFile
     model_output = cosyvoice.inference_cross_lingual(tts_text, prompt_speech_16k)
     return StreamingResponse(generate_data(model_output))
 
+@app.get("/")
+async  def get():
+    return "ok"
 
 @app.post("/inference_instruct")
 async def inference_instruct(tts_text: str = Form(), spk_id: str = Form(), instruct_text: str = Form()):
