@@ -41,9 +41,13 @@ async def inference_sft(tts_text: str = Form(), spk_id: str = Form()):
 
 
 @app.post("/inference_zero_shot")
-async def inference_zero_shot(tts_text: str = Form(), prompt_text: str = Form(), prompt_wav: UploadFile = File(),save_path : str =Form()):
+async def inference_zero_shot(tts_text: str = Form(), prompt_text: str = Form(), prompt_wav: UploadFile = File(),save_path : str =Form() ,speed :str=Form()):
     prompt_speech_16k = load_wav(prompt_wav.file, 16000)
-    model_output = cosyvoice.inference_zero_shot(tts_text, prompt_text, prompt_speech_16k)
+    try:
+        speed = float(speed)
+    except:
+        speed = 1.0
+    model_output = cosyvoice.inference_zero_shot(tts_text, prompt_text, prompt_speech_16k,speed=speed)
     # 保存音频到文件
     tts_audio = b''
     for r in generate_data(model_output):
@@ -64,6 +68,12 @@ async def inference_cross_lingual(tts_text: str = Form(), prompt_wav: UploadFile
 @app.get("/")
 async  def get():
     return "ok"
+
+
+
+@app.get("/language")
+async def language():
+    return ["中文","英文","日语","韩语","粤语"]
 
 @app.post("/inference_instruct")
 async def inference_instruct(tts_text: str = Form(), spk_id: str = Form(), instruct_text: str = Form()):
