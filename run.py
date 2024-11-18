@@ -91,5 +91,5 @@ if __name__ == '__main__':
                         default='pretrained_models/CosyVoice-300M',
                         help='local path or modelscope repo id')
     args = parser.parse_args()
-    cosyvoice = CosyVoice(args.model_dir,fp16=False)
+    cosyvoice = CosyVoice(args.model_dir,,load_jit=False,fp16=False)
     uvicorn.run(app, host="0.0.0.0", port=args.port)
